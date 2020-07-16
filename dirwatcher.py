@@ -88,7 +88,7 @@ def create_parser():
     parser.add_argument('dirname', help='What Dir to watch?', nargs='+')
     parser.add_argument(
         'magic_text', help='What is the magic text?', nargs='+')
-    parser.add_argument('--extname', default='.txt',
+    parser.add_argument('--extname', default=['.txt'],
                         help='What type of file?', nargs='+')
     parser.add_argument('--how_often', default=1,
                         help='How long between scans?',
@@ -114,15 +114,17 @@ def signal_handler(sig_num, frame):
 
 def main(args):
     """executes Dir watcher, logs errors, and listens for OS Signals"""
-    message = "Dir_Watcher Initialized"
-    logger.info(
-        f"{t.bold_green}\n{'$'*w}\n{message.center(int(w))}\n{'$'*w}\n")
 
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
     parser = create_parser()
     argz = parser.parse_args(args)
     polling_interval = argz.how_often
+
+    if argz.dirname is not None and argz.magic_text is not None:
+        message = "Dir_Watcher Initialized"
+        logger.info(
+            f"{t.bold_green}\n{'$'*w}\n{message.center(int(w))}\n{'$'*w}\n")
 
     while not exit_flag:
         try:
