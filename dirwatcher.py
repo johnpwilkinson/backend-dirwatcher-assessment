@@ -6,8 +6,8 @@ import time
 import signal
 from blessings import Terminal
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(levelname)s:%(message)s:')
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(levelname)s:%(message)s')
 logger = logging.getLogger(__name__)
 
 dir_dict = {}
@@ -26,14 +26,14 @@ def get_directory_structure(argz):
     """
     flash_dict = {}
     try:
-        if os.path.isdir(argz.dirname[0]):
-            for dir_content in os.walk(argz.dirname[0]):
+        if os.path.isdir(argz.dirname):
+            for dir_content in os.walk(argz.dirname):
                 files = dir_content[2]
             for file in files:
-                if file.endswith(argz.extname[0]):
+                if file.endswith(argz.extname):
                     flash_dict.setdefault(file, [])
         else:
-            logger.info(f"{argz.dirname[0]} does not exist ")
+            logger.info(f"{argz.dirname} does not exist ")
     except Exception as e:
         logger.exception(f"Alert! {e}")
     compare_dict_sizes(flash_dict, argz)
@@ -48,12 +48,12 @@ def compare_dict_sizes(flash_dict, argz):
         for flash_file in flash_dict:
             if flash_file not in dir_dict:
                 logger.info(
-                    f"{g}{flash_file} has been added to {argz.dirname[0]}")
+                    f"{g}{flash_file} has been added to {argz.dirname}")
                 dir_dict[flash_file] = []
         for actualfile in list(dir_dict):
             if actualfile not in flash_dict:
                 logger.info(
-                    f"{g}{actualfile} has been removed from {argz.dirname[0]}")
+                    f"{g}{actualfile} has been removed from {argz.dirname}")
                 del dir_dict[actualfile]
     except Exception as e:
         logger.exception(f"Alert! {e}")
@@ -66,10 +66,10 @@ def scan_for_magic_text(argz):
     """
     try:
         for file in dir_dict:
-            with open(argz.dirname[0]+"/"+file, "r") as f:
+            with open(argz.dirname+"/"+file, "r") as f:
                 lines = f.readlines()
                 for i, line in enumerate(lines):
-                    if argz.magic_text[0] in line:
+                    if argz.magic_text in line:
                         if i not in dir_dict[file]:
                             dir_dict[file].append(i)
                             logger.info(
@@ -85,14 +85,14 @@ def create_parser():
         description='Watches Dirs for magic strings',
         usage='%(prog)s [options]',
         epilog="Lookin for those magic strings")
-    parser.add_argument('dirname', help='What Dir to watch?', nargs='+')
+    parser.add_argument('dirname', help='What Dir to watch?')
     parser.add_argument(
-        'magic_text', help='What is the magic text?', nargs='+')
-    parser.add_argument('--extname', default=['.txt'],
-                        help='What type of file?', nargs='+')
+        'magic_text', help='What is the magic text?')
+    parser.add_argument('--extname', default='.txt',
+                        help='What type of file?')
     parser.add_argument('--how_often', default=1,
                         help='How long between scans?',
-                        nargs='+')
+                        type=int)
     return parser
 
 
@@ -104,11 +104,17 @@ def signal_handler(sig_num, frame):
     """
     global exit_flag
     run_time = time.time() - init_time
-    message = "Dir_Watcher Terminating"
+    m = "Dir_Watcher Terminating"
     r = f"Run Time was {run_time}"
     b = t.bold_red
-    logger.info(
-        f"{b}\n{'$'*w}\n{message.center(int(w))}\n{r.center(int(w))}\n{'$'*w}")
+    if sig_num == 15:
+        logger.warning(
+            f"{b}Received SIGTERM\n\
+            \n{'$'*(w)}\n{m.center(int(w))}\n{r.center(int(w))}\n{'$'*(w)}")
+    if sig_num == 2:
+        logger.warning(
+            f"{b}Received SIGINT\n\
+            \n{'$'*(w)}\n{m.center(int(w))}\n{r.center(int(w))}\n{'$'*(w)}")
     exit_flag = True
 
 
