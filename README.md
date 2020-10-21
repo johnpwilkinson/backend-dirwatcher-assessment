@@ -12,16 +12,12 @@
 </tbody>
 </table>
 ########################################################  TO LAUNCH LOCALLY ON YOUR MACHINE ######################################################
-I have used the Poetry dependency and package manager for Python / Django (https://python-poetry.org/docs/#installation)
 
-To install poetry use this command in your terminal: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 
 - copy clone link
 - cd in dir you want to clone to
 - git clone 
 - cd into cloned dir
-- poetry install
-- poetry shell
 - in the command-line: python dirwatcher.py -h for full instructions
 
 you will pass a directory_to_watch as well as the magic_text. This program will watch the directory you specify for files that contain the magic_text you specify. The program will run unitl you kill it. It will alert you to files being added or removed from the directory_to_watch as well as what line magic_text was found. 
