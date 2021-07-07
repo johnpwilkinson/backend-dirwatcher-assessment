@@ -2,15 +2,26 @@
 <tbody>
 <tr>
 <td style="width: 124px;"><img src="https://images-na.ssl-images-amazon.com/images/I/51XV10AJC8L._SX333_BO1,204,203,200_.jpg" width="124" height="166" /></td>
-<td style="width: 124px;"><img src="https://mysite.du.edu/~jcalvert/railway/anim1.gif" width="124" height="166" /></td>
-<td style="width: 241.832px;"><img src="http://www.dmainsurance.com/wp-content/uploads/2017/06/logging.jpg" width="202" height="150" /></td>
 <td style="width: 257.168px;">
 <h2 style="text-align: center;">Dirwatcher</h2>
 <p style="text-align: center;">Long-Running Program with signal handling and logging</p>
 </td>
+<td style="width: 241.832px;"><img src="http://www.dmainsurance.com/wp-content/uploads/2017/06/logging.jpg" width="202" height="150" /></td>
+ 
 </tr>
 </tbody>
 </table>
+#####################  TO LAUNCH LOCALLY ON YOUR MACHINE #####################
+
+
+- copy clone link
+- cd in dir you want to clone to
+- git clone 
+- cd into cloned dir
+- in the command-line: python dirwatcher.py -h for full instructions
+
+you will pass a directory_to_watch as well as the magic_text. This program will watch the directory you specify for files that contain the magic_text you specify. The program will run unitl you kill it. It will alert you to files being added or removed from the directory_to_watch as well as what line magic_text was found. 
+
 
 ### Objectives
  - Create a long-running program
